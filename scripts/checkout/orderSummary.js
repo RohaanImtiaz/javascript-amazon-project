@@ -1,4 +1,4 @@
-import { cart, removeFromCart, updateDeliveryOption, updateCartQuantity } from '../data/cart.js';
+import { mainCart } from '../data/cart.js';
 import { getProduct } from '../data/products.js';
 import formatCurrency from '../utils/money.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
@@ -8,7 +8,7 @@ import { renderPaymentSummary } from './paymentSummary.js';
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
 
-  cart.forEach(cartItem => {
+  mainCart.cart.forEach(cartItem => {
     // Product
     let product = getProduct(cartItem.productId);
 
@@ -36,7 +36,7 @@ export function renderOrderSummary() {
             ${product.name}
           </div>
           <div class="product-price">
-            $${formatCurrency(product.priceCents)}
+            ${product.getPrice()}
           </div>
           <div class="product-quantity">
             <span>
@@ -99,7 +99,7 @@ export function renderOrderSummary() {
 
   // Checkout Quantity
   function updateCheckoutQuantity() {
-    let cartQuantity = updateCartQuantity();
+    let cartQuantity = mainCart.updateCartQuantity();
 
     document.querySelector('.js-checkout-items')
       .innerHTML = `${cartQuantity} items`;
@@ -111,7 +111,7 @@ export function renderOrderSummary() {
     .forEach(link => {
       link.addEventListener('click', () => {
         const productId = link.dataset.productId;
-        removeFromCart(productId);
+        mainCart.removeFromCart(productId);
         updateCheckoutQuantity();
         renderPaymentSummary();
 
@@ -134,7 +134,7 @@ export function renderOrderSummary() {
     .forEach(option => {
       option.addEventListener('click', () => {
         const { productId, deliveryOptionId } = option.dataset;
-        updateDeliveryOption(productId, deliveryOptionId);
+        mainCart.updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSummary();
         renderPaymentSummary();
       });

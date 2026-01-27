@@ -1,4 +1,4 @@
-import { cart, updateCartQuantity } from '../data/cart.js';
+import { mainCart } from '../data/cart.js';
 import { getDeliveryOption } from '../data/deliveryOptions.js';
 import { getProduct } from '../data/products.js';
 import formatCurrency from '../utils/money.js';
@@ -8,7 +8,7 @@ export function renderPaymentSummary() {
   let itemsPriceCents = 0;
   let shippingPriceCents = 0;
 
-  cart.forEach(cartItem => {
+  mainCart.cart.forEach(cartItem => {
     let product = getProduct(cartItem.productId);
     itemsPriceCents += product.priceCents * cartItem.quantity;
 
@@ -64,7 +64,7 @@ export function renderPaymentSummary() {
 
   // Items Quantity
   function updateItemsQuantity() {
-    let cartQuantity = updateCartQuantity();
+    let cartQuantity = mainCart.updateCartQuantity();
 
     document.querySelector('.js-items-quantity')
       .innerHTML = `Items (${cartQuantity}):`;
