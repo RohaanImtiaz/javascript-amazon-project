@@ -31,6 +31,18 @@ class Product {
 
 export let products = [];
 
+export function loadProductsFetch(fun) {
+  const promise = fetch('https://supersimplebackend.dev/products')
+
+    .then(response => { return response.json() })
+
+    .then(productsData => {
+      products = productsData.map(productDetails => {
+        return new Product(productDetails);
+      });
+    })
+}
+
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
 
@@ -41,7 +53,6 @@ export function loadProducts(fun) {
       });
 
     console.log('load products');
-    console.log(products);
 
     fun();
   });
